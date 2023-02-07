@@ -3,11 +3,15 @@ FROM ubuntu:kinetic
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt update \
-    && apt install wget php8.1-cli php8.1-zip -fy
-RUN wget https://phoronix-test-suite.com/releases/repo/pts.debian/files/phoronix-test-suite_10.8.4_all.deb -O phoronix.deb \
-    && dpkg -i phoronix.deb \
-    || apt install -fy
+    && apt install php8.1-cli php8.1-zip php8.1-dom php8.1-gd php8.1-bz2 php8.1-sqlite3 php8.1-curl git -fy
 
-COPY test.sh /test.sh
+# Install Phoronix Test Suite.
+RUN git clone https://github.com/phoronix-test-suite/phoronix-test-suite.git
+WORKDIR /phoronix-test-suite
 
-CMD ["bash", "/test.sh"]
+COPY test.sh /phoronix-test-suite/test.sh
+
+# Install the test.
+RUN ./phoronix-test-suite install primesieve
+
+CMD ["bash", "./test.sh"]

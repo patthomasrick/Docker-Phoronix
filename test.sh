@@ -1,3 +1,3 @@
 #!/bin/bash
 
-printf "n\n" | phoronix-test-suite default-benchmark compress-7zip
+printf "1\nn\n" | ./phoronix-test-suite benchmark primesieve
